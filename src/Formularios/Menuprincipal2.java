@@ -8,6 +8,7 @@ package Formularios;
 import Conexion.*;
 import java.awt.event.KeyEvent;
 
+ 
 /**
  *
  * @author hp
@@ -56,7 +57,7 @@ public class Menuprincipal2 extends javax.swing.JFrame {
      
      
      public void cliente (){
-         if (this.administrador||this cajero||this.supervisor){
+         if (this.administrador || this.cajero || this.supervisor){
          ClientesAdministrar cliente = new ClientesAdministrar(this.conector, this.usuarioID,this.usuarioNombre);
         cliente.setVisible(true);
      }
@@ -76,7 +77,7 @@ public class Menuprincipal2 extends javax.swing.JFrame {
                     this.usuarioID,this.usuarioNombre);
             producto.setVisible(true);
         }
-
+         }
             public void ComprarProducto(){
         if(this.administrador || this.supervisor){
             CompraProductoAdministrar compra = new CompraProductoAdministrar(this.conector,
@@ -96,8 +97,8 @@ public class Menuprincipal2 extends javax.swing.JFrame {
     }
          
     public void acercade(){
-       if (this.administrador || this cajero || this.supervisor){
-           AcercaDe sobre = new AcercaDe(this.conector, this.usuarioID,this.usuarioNombre);
+       if (this.administrador || this.cajero || this.supervisor){
+           AcercaDe sobre = new AcercaDe();
            sobre.setVisible(true);
        }
    }
@@ -107,6 +108,9 @@ public class Menuprincipal2 extends javax.swing.JFrame {
            usuario.setVisible(true);
        }
    }
+   
+   
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -135,7 +139,7 @@ public class Menuprincipal2 extends javax.swing.JFrame {
         jMenuAyuda = new javax.swing.JMenu();
         jMenuItemAcercade = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
@@ -240,6 +244,11 @@ public class Menuprincipal2 extends javax.swing.JFrame {
 
         jMenuItemClientes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemClientes.setText("Clientes");
+        jMenuItemClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemClientesActionPerformed(evt);
+            }
+        });
         jMenuAdm.add(jMenuItemClientes);
 
         jMenuItemProveedor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
@@ -251,6 +260,7 @@ public class Menuprincipal2 extends javax.swing.JFrame {
         });
         jMenuAdm.add(jMenuItemProveedor);
 
+        jMenuItemTipoTelefono.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemTipoTelefono.setText("Tipo Telefono");
         jMenuItemTipoTelefono.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -259,7 +269,13 @@ public class Menuprincipal2 extends javax.swing.JFrame {
         });
         jMenuAdm.add(jMenuItemTipoTelefono);
 
+        jMenuItemProducto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemProducto.setText("Producto");
+        jMenuItemProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemProductoActionPerformed(evt);
+            }
+        });
         jMenuAdm.add(jMenuItemProducto);
 
         jMenuBar2.add(jMenuAdm);
@@ -308,11 +324,11 @@ public class Menuprincipal2 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-      //  this.acercade();        // TODO add your handling code here:
+        this.acercade();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-       //this.cliente(); // TODO add your handling code here:
+       this.cliente(); // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -333,7 +349,7 @@ public class Menuprincipal2 extends javax.swing.JFrame {
             }
         }else if (evt.getKeyCode()== KeyEvent.VK_C){
             this.combinar[1]=KeyEvent.VK_C;
-            if(this.combinar[0]==17 && this.combinar[1]==KeyEvent.VK_C){
+            if(this.combinar[0]==17 && this.combinar[1]==67){
                 this.cliente();
             }
             }else if(evt.getKeyCode() == KeyEvent.VK_P ){
@@ -372,6 +388,14 @@ public class Menuprincipal2 extends javax.swing.JFrame {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         this.Producto();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jMenuItemClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemClientesActionPerformed
+    this.cliente();        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemClientesActionPerformed
+
+    private void jMenuItemProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemProductoActionPerformed
+    this.Producto();        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemProductoActionPerformed
 
     /**
      * @param args the command line arguments

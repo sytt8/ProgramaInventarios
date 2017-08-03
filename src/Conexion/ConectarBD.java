@@ -19,7 +19,7 @@ public class ConectarBD {
     private String servidor="jdbc:mysql://localhost:3306/curso_inventario";
     private String user="root";
     private String pass="";
-    private Connection con=null;
+    private Connection con;
     
    
     Statement st;
@@ -47,22 +47,22 @@ public class ConectarBD {
            String query = "Update " +table_name + " set " +campos + " where " +where+ "";
            System.out.println(query);
            st=con.createStatement();
-            rs=st.executeQuery(query);
+            st.executeUpdate(query);
             return true;
         }
        catch (SQLException e){
            System.out.println(e.getMessage());
-           JOptionPane.showMessageDialog(null, "Error ha marcar como completado la reparacion");
+           JOptionPane.showMessageDialog(null, "Error de actualizacion de la base de datos");
        return false;
        }
    }
        public void insertData(String table_name, String campos, String valores){
           try{
-           String query = "INSERT INTO " +table_name + "(" +campos + ") VALUES (" +campos + ")";
-           System.out.println("Consulta insert " + query);
+           String query = "INSERT INTO "+table_name+" ("+campos+") VALUES ("+valores+")";
+           System.out.println(query);
            st=con.createStatement();
-            rs=st.executeQuery(query);
-             }
+           st.execute(query);
+            }
        catch (SQLException e){
            System.out.println(e.getCause()+" " +e.getErrorCode() +" " +e.getMessage());
            JOptionPane.showMessageDialog(null, "Error en el almacenamiento de datos");
@@ -72,7 +72,7 @@ public class ConectarBD {
    public String obtenerUltimoID(String table_name){
        String id="1";
         try{
-           String query = "Select max(id) ad id from " +table_name;
+           String query = "Select max(id) as id from " +table_name;
            st=con.createStatement();
            rs=st.executeQuery(query);
            
@@ -84,7 +84,7 @@ public class ConectarBD {
              }
        catch (SQLException e){
          
-           JOptionPane.showMessageDialog(null, "Error en la adquisicion");
+           JOptionPane.showMessageDialog(null, "Error en la adquisicion del ultimo ID");
       
        } 
         return id;
@@ -95,12 +95,12 @@ public class ConectarBD {
         
         try{
            String query = "Select "+campos+" from " +table_name+" "+otros;
-           System.out.println(query);
+           System.out.println("Obteniendo datos de la tabla: "+query);
            st=con.createStatement();
            rs=st.executeQuery(query);
            }
        catch (SQLException e){
-          JOptionPane.showMessageDialog(null, "Error en la adquisicion de otra cosa: " +e.getMessage());
+          JOptionPane.showMessageDialog(null, "Error en la adquisicion de obtencion de datos de la tabla: " +e.getMessage());
          } 
         return rs;
     }   

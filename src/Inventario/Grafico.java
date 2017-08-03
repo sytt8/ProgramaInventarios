@@ -19,8 +19,9 @@ public class Grafico {
      */
    
     public static void main(String[] arg){
-        ConectarBD conexion = new ConectarBD();
+        //ConectarBD conexion = new ConectarBD();
+        // conexion.ActualizarDato("usuario", "nombre = 'prueba' ", " id = '1' ");
          Login1 log = new Login1();
-            log.setVisible(true);
+         log.setVisible(true);
     }
 }

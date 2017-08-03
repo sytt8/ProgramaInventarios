@@ -6,12 +6,14 @@
 package Formularios;
 
 import Conexion.*;
+import java.awt.HeadlessException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -23,7 +25,7 @@ public class UsuariosAdministrar extends javax.swing.JFrame {
    private String usuarioID="1";
    private String CurrentUsuarioID="1";
    private String usuarioNombre="admin";
-   private ConectarBD conector = null;
+   private ConectarBD conector ;
    private String Buscador = "";
    private Statement st;
    private ResultSet rs;
@@ -75,7 +77,7 @@ public class UsuariosAdministrar extends javax.swing.JFrame {
                 }while (rs.next());
             DefaultTableModel modelo = new DefaultTableModel(fila, titulos);
             this.jTable1.setModel(modelo);
-            this.MostrarBotones(true, false,false);
+            this.MostrarBotones(true, true ,true);
             }else{
                 JOptionPane.showMessageDialog(null, "No hay registro");
                 }  }    
@@ -100,21 +102,21 @@ public class UsuariosAdministrar extends javax.swing.JFrame {
             String table_name = "usuario";
             String campos = "*";
             String otros = " where nombre = '"+usuario+"' ";
-            rs= this.conector.ObtenerDatosParaTabla(table_name,campos ,otros);
+            rs= this.conector.ObtenerDatosParaTabla(table_name, campos ,otros);
             try {
                if( !(rs.first()) ){
                    String tableI = "usuario";
-                   String camposI = "nombre,clave,tipo,usuario_id,fecha";
-                   String valoresI = " '"+usuario+"','"+clave+"','"+tipo+"','"+this.usuarioID+"',now() ";
-                   this.conector.insertData(tableI,camposI , valoresI);
+                   String camposI = "nombre, clave, tipo, usuario_id, fecha";
+                                      
+                   String valoresI = "'"+usuario+"', '"+clave+"', '"+tipo+"', '"+this.usuarioID+"', now()";
+                   this.conector.insertData(tableI, camposI , valoresI);
                    JOptionPane.showMessageDialog(null,"Se inserto");
                    this.jTextFieldUser.setText("");
                    this.jPasswordField1.setText("");
                    this.jComboBox1.setSelectedIndex(0);
                    this.cargarTabla();
                }else{
-                   JOptionPane.showMessageDialog(null, "El "
-                           + "usuario ya existe, favor ingrese otro");
+                   JOptionPane.showMessageDialog(null, "El usuario ya existe, favor ingrese otro");
                }
            } catch (SQLException ex) {
                Logger.getLogger(UsuariosAdministrar.class.getName())
@@ -131,8 +133,8 @@ public class UsuariosAdministrar extends javax.swing.JFrame {
            JOptionPane.showMessageDialog(null,"El campo usuario esta vacío");
        }else if(clave.isEmpty()){
             JOptionPane.showMessageDialog(null,"El campo clave esta vacío");
-       }else if(clave.length() <= 6){
-            JOptionPane.showMessageDialog(null,"La clve tiene que tener mas de 6 caracteres");
+       }else if(clave.length() < 6){
+            JOptionPane.showMessageDialog(null,"La clve tiene que tener 6 o mas caracteres");
        }else{
            String table = "usuario";
            String campos = "nombre='"+usuario+"',clave='"+clave+"',tipo='"+tipo+"' ";
@@ -196,7 +198,7 @@ public class UsuariosAdministrar extends javax.swing.JFrame {
              this.jTextFieldUser.setText(rs.getString("nombre"));
              this.jPasswordField1.setText(rs.getString("clave"));
              this.jComboBox1.setSelectedItem(rs.getString("tipo"));
-             this.MostrarBotones(false, true,true );
+             this.MostrarBotones(true, false,true );
           
         }else{
             JOptionPane.showMessageDialog(null, "No hay registro");
@@ -225,7 +227,12 @@ public class UsuariosAdministrar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        Editar = new javax.swing.JMenuItem();
+        Eliminar = new javax.swing.JMenuItem();
         jButtonAdd = new javax.swing.JButton();
+        jButtonCancel = new javax.swing.JButton();
+        jButtonEditar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -257,11 +264,28 @@ public class UsuariosAdministrar extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
-        jButtonCancel = new javax.swing.JButton();
-        jButtonEditar = new javax.swing.JButton();
         jTextFieldBuscador = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        Editar.setText("Editar");
+        Editar.setToolTipText("");
+        Editar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                EditarMousePressed(evt);
+            }
+        });
+        jPopupMenu1.add(Editar);
+
+        Eliminar.setText("Eliminar");
+        Eliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                EliminarMousePressed(evt);
+            }
+        });
+        jPopupMenu1.add(Eliminar);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButtonAdd.setText("Añadir");
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -269,6 +293,23 @@ public class UsuariosAdministrar extends javax.swing.JFrame {
                 jButtonAddActionPerformed(evt);
             }
         });
+        getContentPane().add(jButtonAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 430, -1, -1));
+
+        jButtonCancel.setText("Cancelar");
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButtonCancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 430, -1, -1));
+
+        jButtonEditar.setText("Editar");
+        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButtonEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, -1, -1));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -278,13 +319,16 @@ public class UsuariosAdministrar extends javax.swing.JFrame {
 
             }
         ));
+        jTable1.setComponentPopupMenu(jPopupMenu1);
         jScrollPane1.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 54, 290, 280));
 
         jLabel10.setText("Usuario");
 
         jLabel11.setText("Clave");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "cajero", "supervisor", "cajero" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "cajero", "supervisor", "administrador" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -490,69 +534,25 @@ public class UsuariosAdministrar extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Email", jPanel2);
 
-        jButtonCancel.setText("Cancelar");
-        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCancelActionPerformed(evt);
-            }
-        });
-
-        jButtonEditar.setText("Editar");
-        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEditarActionPerformed(evt);
-            }
-        });
+        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 37, -1, -1));
 
         jTextFieldBuscador.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextFieldBuscadorKeyReleased(evt);
             }
         });
+        getContentPane().add(jTextFieldBuscador, new org.netbeans.lib.awtextra.AbsoluteConstraints(347, 23, 296, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 81, Short.MAX_VALUE)
-                        .addComponent(jButtonEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonAdd)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonCancel)
-                        .addGap(44, 44, 44)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
-                .addComponent(jTextFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonAdd)
-                    .addComponent(jButtonCancel)
-                    .addComponent(jButtonEditar))
-                .addContainerGap())
-        );
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondo Grande.png"))); // NOI18N
+        jLabel12.setText("ll");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 560));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public UsuariosAdministrar(JLabel jLabel12) throws HeadlessException {
+        this.jLabel12 = jLabel12;
+    }
 
      public UsuariosAdministrar(ConectarBD conector, String usuarioID, String usuarioNombre) {
         initComponents();
@@ -563,7 +563,7 @@ public class UsuariosAdministrar extends javax.swing.JFrame {
     }
     
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
-this.insert();        // TODO add your handling code here:
+    this.insert();        // TODO add your handling code here:
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
@@ -591,9 +591,19 @@ this.editar();        // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-this.MostrarBotones(true, false, false);
-this.limpiar();        // TODO add your handling code here:
+        this.MostrarBotones(true, false, false);
+        this.limpiar();        // TODO add your handling code here:
     }//GEN-LAST:event_jButtonCancelActionPerformed
+
+    private void EditarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditarMousePressed
+        // TODO add your handling code here:
+        this.MostrarDato();
+    }//GEN-LAST:event_EditarMousePressed
+
+    private void EliminarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EliminarMousePressed
+        // TODO add your handling code here:
+        this.eliminar();
+    }//GEN-LAST:event_EliminarMousePressed
 
     /**
      * @param args the command line arguments
@@ -601,6 +611,8 @@ this.limpiar();        // TODO add your handling code here:
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem Editar;
+    private javax.swing.JMenuItem Eliminar;
     private javax.swing.JButton jButtonAdd;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonEditar;
@@ -608,6 +620,7 @@ this.limpiar();        // TODO add your handling code here:
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -622,6 +635,7 @@ this.limpiar();        // TODO add your handling code here:
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
