@@ -1171,7 +1171,7 @@ public class ProveedorAdministrar extends javax.swing.JFrame {
         });
         jPopupMenuTelefono.add(EliminarTelefono);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTabbedPane1.setComponentPopupMenu(jPopupMenuEmail);
 

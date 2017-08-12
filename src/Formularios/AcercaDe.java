@@ -32,7 +32,7 @@ public class AcercaDe extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("<html><body><p><hr/>Esta app fue creada para poder llevar un control del inventario de los productos a vender, también nos ayudara a crear nuestra factura y llevar el control de la misma y cuenta con un sistema de gestor de reporte bastante efectivo para dar le un progrese a nuestro supervisor.</p></body></html>");

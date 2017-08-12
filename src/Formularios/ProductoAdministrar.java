@@ -28,7 +28,7 @@ public class ProductoAdministrar extends javax.swing.JFrame {
     
     //atributo del producto
     private String producto = "",precio = "";
-
+    private String cantidad_almacen = "";
     private String Buscador = "";
     private String Origen= "producto";
     private CompraProductoAdministrar compraProductoAdministrar;
@@ -110,9 +110,8 @@ public class ProductoAdministrar extends javax.swing.JFrame {
            try {
                 if(this.validarProducto()){
                     String tableI = "producto";
-                    String camposI = "nombre,precio,usuario_id,fecha";
-                    String valoresI = " '"+this.producto+"','"+this.precio+"' "+
-                            ",'"+this.usuarioID+"',now() ";
+                    String camposI = "nombre,precio,usuario_id,fecha,cantidad_almacen";
+                    String valoresI = " '"+this.producto+"','"+this.precio+"','"+this.usuarioID+"',now(),'"+this.cantidad_almacen+"'";
                     this.conector.insertData(tableI,camposI , valoresI);
                     this.validarOrigen();
                  }
@@ -129,6 +128,7 @@ public class ProductoAdministrar extends javax.swing.JFrame {
     public boolean validarDatos(){
        this.producto = this.jTextField1.getText();
        this.precio = this.jTextField2.getText();
+       this.cantidad_almacen = this.jTextField3.getText();
        boolean resp = false;
        if(producto.isEmpty()){
            JOptionPane.showMessageDialog(null,"El campo producto "
@@ -163,8 +163,7 @@ public class ProductoAdministrar extends javax.swing.JFrame {
     public void eliminar(){
        int index = this.jTable1.getSelectedRow();
         if(index >= 0){
-           if(JOptionPane.showConfirmDialog(null, "Esta "
-                   + "seguro que desea eliminar el producto?",
+           if(JOptionPane.showConfirmDialog(null, "Esta seguro que desea eliminar el producto?",
                    "Eliminar producto", JOptionPane.YES_NO_OPTION,
                    JOptionPane.QUESTION_MESSAGE) 
                    == JOptionPane.YES_OPTION ){ 
@@ -179,21 +178,15 @@ public class ProductoAdministrar extends javax.swing.JFrame {
                 this.cargarTabla();
            }
         }else{
-            JOptionPane.showMessageDialog(null, "No hay fila"
-                    + " seleccionada");
-
-       }
-       
-       
+            JOptionPane.showMessageDialog(null, "No hay fila seleccionada");
+        } 
     }
     
   public void MostrarDato(){
         int index = this.jTable1.getSelectedRow();
         if(index >= 0){
         String id = this.jTable1.getValueAt(index, 0).toString();
-        //String nombre= this.jTable1.getValueAt(index, 0).toString();
-        //String tipo = this.jTable1.getValueAt(index, 0).toString();
-        //JOptionPane.showMessageDialog(null, nombre+" "+id+" "+tipo);
+        
         try {
         String table_name = "producto";
         String campos = " * ";
@@ -206,7 +199,7 @@ public class ProductoAdministrar extends javax.swing.JFrame {
              this.MostrarBotones(false, true,true );
         }else{
             JOptionPane.showMessageDialog(null, "No hay registro");
-            //System.out.println("");
+          
         }
         
           } catch (SQLException ex) {
@@ -287,6 +280,8 @@ public class ProductoAdministrar extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jTextFieldBuscador = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
+        jTextField3 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
 
         Editar.setText("Editar");
         Editar.setToolTipText("");
@@ -305,7 +300,7 @@ public class ProductoAdministrar extends javax.swing.JFrame {
         });
         jPopupMenu1.add(Eliminar);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -329,6 +324,11 @@ public class ProductoAdministrar extends javax.swing.JFrame {
                 jButton1MousePressed(evt);
             }
         });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Editar");
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -336,11 +336,21 @@ public class ProductoAdministrar extends javax.swing.JFrame {
                 jButton2MousePressed(evt);
             }
         });
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Cancelar");
         jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton3MousePressed(evt);
+            }
+        });
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
             }
         });
 
@@ -351,6 +361,8 @@ public class ProductoAdministrar extends javax.swing.JFrame {
         });
 
         jLabel9.setText("Que deseas buscar?");
+
+        jLabel3.setText("Cantidad ingresada");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -374,10 +386,13 @@ public class ProductoAdministrar extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(4, 4, 4)
-                                .addComponent(jLabel2))
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))))
                         .addGap(36, 36, 36)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(79, Short.MAX_VALUE))
@@ -406,7 +421,11 @@ public class ProductoAdministrar extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addGap(6, 6, 6)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
+                        .addGap(6, 6, 6)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(65, Short.MAX_VALUE))
         );
@@ -445,6 +464,18 @@ public class ProductoAdministrar extends javax.swing.JFrame {
         this.eliminar();
     }//GEN-LAST:event_EliminarMousePressed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        this.limpiar();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    this.insert();       // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+this.editar();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -457,12 +488,14 @@ public class ProductoAdministrar extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextFieldBuscador;
     // End of variables declaration//GEN-END:variables
 }

@@ -69,9 +69,9 @@ public class CompraProductoAdministrar extends javax.swing.JFrame {
         Buscador
     */
     public void BuscadorCliente(){
-        if(!(this.jTextFieldBuscador.getText().isEmpty())){
-            // pro.nombre as producto, concat(p.nombre,' ',p.apellido)
-            this.Buscador = " and concat(p.nombre,' ',p.apellido,' ',pro.nombre,' ',cp.id,' ',cp.precio_compra,' ',u.nombre) like '%"+this.jTextFieldBuscador.getText()+"%'";
+        if(!(this.jTextFieldBuscador1.getText().isEmpty())){
+            
+            this.Buscador = " and concat(p.nombre,' ',p.apellido,' ',pro.nombre,' ',cp.id,' ',cp.precio_compra,' ',u.nombre) like '%"+this.jTextFieldBuscador1.getText()+"%'";
             this.cargarTabla();
         }else{
             this.Buscador = "";
@@ -121,7 +121,7 @@ public class CompraProductoAdministrar extends javax.swing.JFrame {
                 String table_name = "proveedor as c "
                 + "inner join persona as p on c.persona_id = p.id "
                 + "inner join usuario as u on p.usuario_id = u.id ";
-                //String campos = "concat('Cod:',c.id,' ',p.nombre,' ',p.apellido,' Cedula:',p.cedula,' RNC:',c.rnc) as proveedor , c.rnc,c.id,p.nombre,p.apellido,p.cedula, u.nombre as usuario ";
+                
                 String campos = "concat('Cod:',c.id,' ',p.nombre,' ',p.apellido) as proveedor , c.rnc,c.id,p.nombre,p.apellido,p.cedula, u.nombre as usuario ";        
                 String otros = " where  c.visible = true ";
             java.sql.ResultSet resultSet = this.conector.ObtenerDatosParaTabla(table_name,campos ,otros);
@@ -289,14 +289,14 @@ public class CompraProductoAdministrar extends javax.swing.JFrame {
 
     }
     public void eliminar(){
-       int index = this.jTable1.getSelectedRow();
+       int index = this.jTable2.getSelectedRow();
         if(index >= 0){
            if(JOptionPane.showConfirmDialog(null, "Esta "
                    + "seguro que desea eliminar la compra?",
                    "Eliminar compra", JOptionPane.YES_NO_OPTION,
                    JOptionPane.QUESTION_MESSAGE) 
                    == JOptionPane.YES_OPTION ){ 
-                this.CurrentUsuarioID = this.jTable1.getValueAt(index, 0)
+                this.CurrentUsuarioID = this.jTable2.getValueAt(index, 0)
                         .toString();
                 //Eliminamos la compra
                 String table = "compra_producto";
@@ -318,11 +318,11 @@ public class CompraProductoAdministrar extends javax.swing.JFrame {
     }
     
   public void MostrarDato(){
-        int index = this.jTable1.getSelectedRow();
+        int index = this.jTable2.getSelectedRow();
         if(index >= 0){
-        String id = this.jTable1.getValueAt(index, 0).toString();
-        //String nombre= this.jTable1.getValueAt(index, 0).toString();
-        //String tipo = this.jTable1.getValueAt(index, 0).toString();
+        String id = this.jTable2.getValueAt(index, 0).toString();
+        //String nombre= this.jTable2.getValueAt(index, 0).toString();
+        //String tipo = this.jTable2.getValueAt(index, 0).toString();
         //JOptionPane.showMessageDialog(null, nombre+" "+id+" "+tipo);
         try {
         
@@ -385,7 +385,7 @@ inner join persona as p on p.id = prov.persona_id
         String otros = " where cp.visible = true "+this.Buscador;
         java.sql.ResultSet resultSet = this.conector.
                 ObtenerDatosParaTabla(table_name,campos ,otros);
-        this.jTable1.setModel(new DefaultTableModel());
+        this.jTable2.setModel(new DefaultTableModel());
         if( resultSet.first() ){
             int total = 0;
         do{
@@ -409,7 +409,7 @@ inner join persona as p on p.id = prov.persona_id
                     c++;
              } while(resultSet.next());
           DefaultTableModel modelo = new DefaultTableModel(fila,titulos);
-          this.jTable1.setModel(modelo);
+          this.jTable2.setModel(modelo);
           this.MostrarBotones(true, false, false);
         }else{
             JOptionPane.showMessageDialog(null, "No hay registro");
@@ -469,7 +469,7 @@ inner join persona as p on p.id = prov.persona_id
         });
         jPopupMenu1.add(Eliminar);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jButton2.setText("Editar");
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -477,11 +477,21 @@ inner join persona as p on p.id = prov.persona_id
                 jButton2MousePressed(evt);
             }
         });
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Cancelar");
         jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jButton3MousePressed(evt);
+            }
+        });
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
             }
         });
 
@@ -687,6 +697,15 @@ inner join persona as p on p.id = prov.persona_id
         this.eliminar();
     }//GEN-LAST:event_EliminarMousePressed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.editar();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        this.MostrarBotones(true, false, false);
+        this.limpiar();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -695,7 +714,6 @@ inner join persona as p on p.id = prov.persona_id
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Editar;
     private javax.swing.JMenuItem Eliminar;
-    private javax.swing.JPanel Vista;
     private javax.swing.JPanel Vista1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -709,13 +727,9 @@ inner join persona as p on p.id = prov.persona_id
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPopupMenu jPopupMenu1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextFieldBuscador;
     private javax.swing.JTextField jTextFieldBuscador1;
     private javax.swing.JTextField jTextFieldCantidad;
     private javax.swing.JTextField jTextFieldPrecioCompraUnidad;
